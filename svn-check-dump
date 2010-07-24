@@ -1,0 +1,51 @@
+#!/bin/bash -i
+# SVN CHECK DUMP : verify an SVN dump.
+# The script creates a repository using svnadmin, 
+# load the specified dump file, verify it and remove it.
+
+# Cleanup exit function
+function svn_check_dump_exit()
+{
+	# remove tmp test repository directory
+	if [ -d $repo_path ]; then
+		rm -rf $repo_path
+	fi
+	exit
+}
+
+# Check if an existing dump file is provided as an argument
+if [ $1 ]; then
+	if [ ! -f $1 ]; then	
+		echo "$1 not found"
+		svn_check_dump_exit
+	else
+		dump_path=$1		
+	fi
+else
+	echo "Enter SVN dump file to test :"
+	read -e dump_path
+	if [ ! -f $dump_path ]; then
+		echo "$dump_path not found"
+		svn_check_dump_exit
+	fi
+fi
+
+# Setup tmp test repository directory
+repo_path="/tmp/testrepo/" 
+rm -rf $repo_path
+mkdir $repo_path
+
+# Create, import and verify repository from dump
+echo "Creating repository..."
+if ! svnadmin create $repo_path; then
+	echo "Error on : svnadmin create $repo_path"
+	svn_check_dump_exit
+fi
+echo "Loading dump... (this may take a while depending on your repo size)"
+if ! svnadmin load -q $repo_path < $dump_path; then
+	echo "Error on : svnadmin load -q $repo_path < $dump_path"
+	svn_check_dump_exit
+fi
+echo "Veriy dump..."
+svnadmin verify $repo_path
+svn_check_dump_exit
