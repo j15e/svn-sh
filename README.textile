@@ -10,7 +10,7 @@ h2. What they do
 
 h3. svn-add
 
-Add all files listed width ? status in current repo
+Add all files listed with ? status in current repo (all new files)
 
 h3. svn-check-dump [dump]
 
