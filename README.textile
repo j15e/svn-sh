@@ -1,0 +1,13 @@
+h1. SVN shell scripts
+This repo contains various SVN shell scripts intended to extent svn and svnadmin features.
+
+h2. Intended use
+Add this repo to your $PATH to make all scripts available at all time
+
+h2. What they do
+
+h3. svn-add
+Add all files listed width ? status in current repo
+
+h3. svn-check-dump [dump]
+Verify an SVN dump. The script creates a repository using svnadmin, load the specified dump file, verify it and remove it.
